@@ -1,0 +1,137 @@
+#include <iostream>
+#include "mylib.h"
+#include <windows.h>
+#include <string>
+//	#define MAX 100
+using namespace std;
+
+int x = 50; int y = 5;
+void box(int x, int y, int w, int h, int t_color, int b_color, string nd);
+//void n_box(int x, int y, int w, int h, int t_color, int b_color, string nd, int sl);
+void Menu();
+void Thanhsang(int x, int y, int w, int h, int b_color, string nd);
+
+
+int main() {
+	
+	//n_box(x, y, 20, 2, 11, 1, "MENU",4);
+	Menu();
+	_getch();
+}
+
+void Menu() {
+	ShowCur(0);
+	int w = 20;
+	int h = 2;
+	int t_color = 11;
+	int b_color = 1;
+	int l_color = 19;
+	string nd = "hang hoa";
+	int sl = 4;
+	box(x, y, w, h, t_color, b_color, nd);
+	
+	//+++++++++++
+	int xp = x; int yp = y; //tọa độ thanh sáng
+	int x_old = xp; int y_old = yp;
+	bool kt = true;
+	while (true) {
+		
+		//++++++in+++++++++++
+		if (kt == true) {
+			//++++++back space+++++
+			gotoXY(x_old, y_old);
+			Thanhsang(x_old, y_old, w, h, b_color, nd);// reset lại thanh sáng cũ
+			x_old = xp; y_old = yp;
+			Thanhsang(xp, yp, w, h, l_color, nd);
+			kt = false;
+		}
+		// +++++điều khiển++++++// +++++di chuyển+++++
+		if (_kbhit()) {
+			char c = _getch();
+			if (c == -32) {
+				kt = true; // đã bấm
+				c = _getch();
+				if (c == 72 ) {
+					if (yp != y) {
+						yp -= 2;
+					}
+					else {
+						yp = y + h * (sl - 1);
+					}
+
+				}
+				else if(c==80  ){
+					if (yp != y + h * (sl - 1)) {
+						yp += 2;
+					}
+					else {
+						yp = y;
+					}
+				}
+			}
+		}
+		//+++++++speed++++
+	}
+}
+
+void Thanhsang(int x, int y, int w, int h, int b_color, string nd ) {
+	textcolor(b_color);
+	for (int iy = y + 1; iy <= y + h - 1; iy++)
+	{
+		for (int ix = x + 1; ix < x + w - 1; ix++)
+		{
+			gotoXY(ix, iy); cout << " ";
+		}
+	}
+	SetColor(7);
+	gotoXY(x + 1, y + 1);
+	cout << nd;
+}
+
+void box(int x, int y, int w, int h, int t_color, int b_color, string nd) 
+{
+	textcolor(b_color);
+	for (int iy = y+1; iy <= y + h-1; iy++) 
+	{
+		for (int ix = x+1; ix < x + w-1; ix++) 
+		{
+			gotoXY(ix, iy); cout << " "; 
+		}
+	}
+	SetColor(7);
+	gotoXY(x + 1, y + 1);
+	cout << nd;
+	textcolor(1);
+	SetColor(t_color);
+	if (h <= 1 || w <= 1) return;
+
+	for (int ix = x; ix <= x + w; ix++) 
+	{
+		gotoXY(ix, y);
+		cout << char(196);
+		gotoXY(ix, y + h);
+		cout << char(196);
+	}
+	for (int iy = y; iy <= y + h; iy++) 
+	{
+		gotoXY(x, iy);
+		cout << char(179);
+		gotoXY(x + w, iy);
+		cout << char(179);
+	}
+	gotoXY(x, y);cout << char(218);
+	gotoXY(x + w, y); cout << char(191);
+	gotoXY(x, y + h); cout << char(192);
+	gotoXY(x + w, y + h); cout << char(217);
+}
+
+/*void n_box(int x, int y, int w, int h, int t_color, int b_color, string nd, int sl) {
+	for (int i = 0; i < sl; i++) {
+		box(x, y + (i * 2), w, h, t_color, b_color, nd);
+		if (i != 0)
+		{
+			gotoXY(x, y + (i * 2)); cout << char(195);
+			gotoXY(x + w, y + (i * 2));	cout << char(180);
+		}
+	}
+}*/
